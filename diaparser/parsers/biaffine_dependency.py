@@ -167,7 +167,7 @@ class BiaffineDependencyParser(Parser):
             mask[:, 0] = 0
             s_arc, s_rel = self.model(words, feats)
             loss = self.model.loss(s_arc, s_rel, arcs, rels, mask, self.args.partial)
-            arc_preds, rel_preds = self.model.decode(s_arc, s_rel, mask,
+            arc_preds, rel_preds, _ = self.model.decode(s_arc, s_rel, mask,
                                                      self.args.tree,
                                                      self.args.proj)
             if self.args.partial:
@@ -193,7 +193,7 @@ class BiaffineDependencyParser(Parser):
             mask[:, 0] = 0
             lens = mask.sum(1).tolist()
             s_arc, s_rel = self.model(words, feats)
-            arc_preds, rel_preds = self.model.decode(s_arc, s_rel, mask,
+            arc_preds, rel_preds, rel_probs = self.model.decode(s_arc, s_rel, mask,
                                                      self.args.tree,
                                                      self.args.proj)
             arcs.extend(arc_preds[mask].split(lens))
@@ -206,6 +206,7 @@ class BiaffineDependencyParser(Parser):
         preds = {'arcs': arcs, 'rels': rels}
         if self.args.prob:
             preds['probs'] = probs
+            preds['rel_attn'] = rel_probs
 
         return preds
 

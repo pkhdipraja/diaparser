@@ -360,4 +360,7 @@ class BiaffineDependencyModel(nn.Module):
         # choose those corresponding to the predicted arcs
         rel_preds = rel_preds.gather(-1, arc_preds.unsqueeze(-1)).squeeze(-1)
 
-        return arc_preds, rel_preds
+        # Index 0 is for root, the 1st token starts from index 1
+        rel_probs = s_rel[:, torch.arange(arc_preds.size(-1)), arc_preds.squeeze(0), :].softmax(-1)
+
+        return arc_preds, rel_preds, rel_probs

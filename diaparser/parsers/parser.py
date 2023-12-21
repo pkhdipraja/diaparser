@@ -182,6 +182,7 @@ class Parser():
         self.transform.eval()
         if args.prob:
             self.transform.append(Field('probs'))
+            self.transform.append(Field('rel_attn'))
         
         if isinstance(data, str) and (not conll_format(data) or args.text):
             self.transform.reader = Tokenizer(args.text, dir=args.cache_dir, verbose=args.verbose).reader()
