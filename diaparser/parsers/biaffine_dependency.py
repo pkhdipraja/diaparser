@@ -207,6 +207,8 @@ class BiaffineDependencyParser(Parser):
         if self.args.prob:
             preds['probs'] = probs
             preds['rel_attn'] = rel_probs
+            preds['s_rel'] = s_rel
+            preds['arc_preds'] = arc_preds
 
         return preds
 
